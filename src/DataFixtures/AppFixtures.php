@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Employe;
@@ -13,6 +14,14 @@ use \DateInterval;
 
 class AppFixtures extends Fixture
 {
+
+    public function __construct(
+        private UserPasswordHasherInterface $hasher
+    )
+    {
+
+    }
+
     public function load(ObjectManager $manager): void
     {
         // Création des statuts
@@ -35,6 +44,8 @@ class AppFixtures extends Fixture
             ->setPrenom('Natalie')
             ->setEmail('natalie@driblet.com')
             ->setStatut('CDI')
+            ->setRoles(['ROLE_ADMIN'])
+            ->setPassword($this->hasher->hashPassword($employe1, '123456'))
             ->setDateArrivee(new DateTime('2019-06-14'));
         $manager->persist($employe1);
 
@@ -43,6 +54,7 @@ class AppFixtures extends Fixture
             ->setPrenom('Demi')
             ->setEmail('demi@driblet.com')
             ->setStatut('CDD')
+            ->setPassword($this->hasher->hashPassword($employe2, 'd3mibak3r'))
             ->setDateArrivee(new DateTime('2022-09-01'));
         $manager->persist($employe2);
 
@@ -50,6 +62,7 @@ class AppFixtures extends Fixture
         $employe3->setNom('Dupont')
             ->setPrenom('Marie')
             ->setEmail('marie@driblet.com')
+            ->setPassword($this->hasher->hashPassword($employe3, '011216'))
             ->setStatut('Freelance')
             ->setDateArrivee(new DateTime('2021-12-20'));
         $manager->persist($employe3);

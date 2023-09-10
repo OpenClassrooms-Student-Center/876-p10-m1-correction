@@ -8,6 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\EmployeRepository;
 use App\Form\EmployeType;
+use App\Form\RegisterType;
+use App\Entity\Employe;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class EmployeController extends AbstractController
@@ -18,6 +21,36 @@ class EmployeController extends AbstractController
     )
     {
 
+    }
+
+    #[Route('/bienvenue', name: 'app_bienvenue')]
+    public function boenvenue(): Response
+    {
+        return $this->render('auth/bienvenue.html.twig');
+    }
+
+    #[Route('/inscription', name: 'app_register')]
+    public function register(Request $request, UserPasswordHasherInterface $hasher): Response
+    {
+        $employe = new Employe();
+        $employe
+            ->setStatut('CDI')
+            ->setDateArrivee(new \DateTime());
+
+        $form = $this->createForm(RegisterType::class, $employe);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $employe->setPassword($hasher->hashPassword($employe, $employe->getPassword()));
+
+            $this->entityManager->persist($employe);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('app_projets');
+        }
+        
+        return $this->render('auth/register.html.twig', [
+            'form' => $form,
+        ]);
     }
 
     #[Route('/employes', name: 'app_employes')]
