@@ -10,7 +10,9 @@
                 <div class="avatar">{{ employe.prenom | first }}{{ employe.nom | first }}</div>
             {% endfor %}
         </div>
-        <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+        {% if is_granted('ROLE_ADMIN') %}
+            <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+        {% endif %}
     </div>
 {% endblock %}
 
