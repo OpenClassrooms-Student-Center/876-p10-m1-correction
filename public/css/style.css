@@ -582,6 +582,28 @@ div#main-content-logout .button {
     background: #fff;
 }
 
+div#main-content-logout form .button {
+    width: 100%;
+}
+
+.error-login {
+    text-align: center;
+    color: #E14343;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+div#current-user .avatar {
+    border: 1px solid #1C5B50;
+    color: #1C5B50;
+    text-decoration: none;
+    margin-left: auto;
+    background: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 @media (max-width: 992px) {
     nav {
         width: 150px;

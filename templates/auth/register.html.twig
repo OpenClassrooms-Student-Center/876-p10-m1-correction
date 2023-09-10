@@ -14,7 +14,7 @@
         {{ form_row(form.password.second) }}
     </div>
     <button class="button button-submit">Continuer</button>
-    <a href="#" class="link-logout">Vous avez déjà un compte ?</a>
+    <a href="{{ path('app_login') }}" class="link-logout">Vous avez déjà un compte ?</a>
 
 {{ form_end(form) }}
 

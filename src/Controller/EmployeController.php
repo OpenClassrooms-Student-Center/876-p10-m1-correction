@@ -12,6 +12,7 @@ use App\Form\RegisterType;
 use App\Entity\Employe;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class EmployeController extends AbstractController
 {
@@ -24,10 +25,29 @@ class EmployeController extends AbstractController
     }
 
     #[Route('/bienvenue', name: 'app_bienvenue')]
-    public function boenvenue(): Response
+    public function bienvenue(): Response
     {
         return $this->render('auth/bienvenue.html.twig');
     }
+
+    #[Route('/connexion', name: 'app_login')]
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        $erreur = $authenticationUtils->getLastAuthenticationError();
+        $email = $authenticationUtils->getLastUsername();
+
+        return $this->render('auth/login.html.twig', [
+            'email' => $email,
+            'erreur'         => $erreur,
+        ]);
+    }
+
+    #[Route('/deconnexion', name: 'app_logout')]
+    public function logout(): never
+    {
+        // On ne passera jamais ici, Symfony gère la déconnexion pour nous.
+    }
+
 
     #[Route('/inscription', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $hasher): Response
