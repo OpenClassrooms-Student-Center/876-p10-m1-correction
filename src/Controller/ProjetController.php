@@ -28,9 +28,13 @@ class ProjetController extends AbstractController
     #[Route('/', name: 'app_projets')]
     public function projets(): Response
     {
-        $projets = $this->projetRepository->findBy([
-            'archive' => false,
-        ]);
+        if($this->getUser()->isAdmin()) {
+            $projets = $this->projetRepository->findBy([
+                'archive' => false,
+            ]);    
+        } else {
+            $projets = $this->getUser()->getProjets()->filter(function (Projet $projet) { return !$projet->isArchive(); });
+        }
 
         return $this->render('projet/liste.html.twig', [
             'projets' => $projets,
@@ -60,6 +64,7 @@ class ProjetController extends AbstractController
     }
 
     #[Route('/projets/{id}', name: 'app_projet')]
+    #[IsGranted('acces_projet', 'id')]
     public function projet(int $id): Response
     {  
         $statuts = $this->statutRepository->findAll();

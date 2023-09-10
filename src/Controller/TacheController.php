@@ -12,6 +12,7 @@ use App\Repository\TacheRepository;
 use App\Form\TacheType;
 use App\Entity\Tache;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class TacheController extends AbstractController
 {
@@ -26,6 +27,7 @@ class TacheController extends AbstractController
     }
 
     #[Route('/projets/{id}/taches/ajouter', name: 'app_tache_add')]
+    #[IsGranted('acces_projet', 'id')]
     public function ajouterTache(int $id, Request $request): Response
     {  
         $projet = $this->projetRepository->find($id);
@@ -52,6 +54,7 @@ class TacheController extends AbstractController
     }
 
     #[Route('/taches/{id}/supprimer', name: 'app_tache_delete')]
+    #[IsGranted('acces_tache', 'id')]
     public function supprimerTache(int $id): Response
     {  
         $tache = $this->tacheRepository->find($id);
@@ -68,6 +71,7 @@ class TacheController extends AbstractController
 
 
     #[Route('/taches/{id}', name: 'app_tache')]
+    #[IsGranted('acces_tache', 'id')]
     public function tache(int $id, Request $request): Response
     {  
         $tache = $this->tacheRepository->find($id);
