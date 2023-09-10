@@ -13,6 +13,12 @@ use App\Entity\Employe;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\Writer\PngWriter;
 
 class EmployeController extends AbstractController
 {
@@ -48,9 +54,34 @@ class EmployeController extends AbstractController
         // On ne passera jamais ici, Symfony gère la déconnexion pour nous.
     }
 
+    #[Route('/2fa/qrcode', name: '2fa_qrcode')]
+    public function displayGoogleAuthenticatorQrCode(GoogleAuthenticatorInterface $googleAuthenticator): Response
+    {
+
+        return new Response(Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($googleAuthenticator->getQRContent($this->getUser()))
+        ->encoding(new Encoding('UTF-8'))
+        ->errorCorrectionLevel(new ErrorCorrectionLevelHigh())
+        ->size(200)
+        ->margin(0)
+        ->roundBlockSizeMode(new RoundBlockSizeModeMargin())
+        ->build()->getString(), 200, ['Content-Type' => 'image/png']);
+    }
+
+    #[Route('/2fa', name: '2fa_login')]
+    public function displayGoogleAuthenticator(): Response
+    {
+        return $this->render('auth/2fa.html.twig', [
+            'qrCode' => $this->generateUrl('2fa_qrcode'),
+        ]);
+    }
+
+
 
     #[Route('/inscription', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $hasher): Response
+    public function register(Request $request, UserPasswordHasherInterface $hasher, GoogleAuthenticatorInterface $googleAuth): Response
     {
         $employe = new Employe();
         $employe
@@ -62,6 +93,7 @@ class EmployeController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             $employe->setPassword($hasher->hashPassword($employe, $employe->getPassword()));
+            $employe->setGoogleAuthenticatorSecret($googleAuth->generateSecret());
 
             $this->entityManager->persist($employe);
             $this->entityManager->flush();

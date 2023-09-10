@@ -604,6 +604,11 @@ div#current-user .avatar {
     font-weight: 700;
 }
 
+.qrcode {
+    display: block;
+    margin: 25px auto;
+}
+
 @media (max-width: 992px) {
     nav {
         width: 150px;
