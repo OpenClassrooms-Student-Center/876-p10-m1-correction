@@ -203,4 +203,16 @@ class Employe implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isAdmin(): bool 
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
+
+    public function setAdmin(bool $admin): static 
+    {
+        $this->roles = $admin ? ['ROLE_ADMIN'] : [];
+
+        return $this;
+    }
 }

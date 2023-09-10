@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class EmployeType extends AbstractType
 {
@@ -19,6 +20,13 @@ class EmployeType extends AbstractType
             ->add('email', EmailType::class)
             ->add('statut')
             ->add('dateArrivee', DateType::class, ['widget' => 'single_text', 'label' => 'Date d\'entrée'])
+            ->add('admin', ChoiceType::class, [
+                'label' => 'Rôle',
+                'choices' => [
+                    'Collaborateur' => false,
+                    'Chef de projet' => true,
+                ],
+            ])
         ;
     }
 
