@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1" />
+        <title>{% block title %}TaskLinker{% endblock %}</title>
+        <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="{{ asset('js/select.js') }}"></script>
+    </head>
+    <body>
+        <div id="main-container">
+            <nav>
+                <a href="{{ path('app_projets') }}" id="logo">
+                    <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
+                </a>
+                <ul id="main-menu">
+                    <li class="{% if not (app.request.get('_route') starts with 'app_employe') %}active{% endif %}">
+                        <a href="{{ path('app_projets') }}">
+                            <i class="fa-solid fa-list-check"></i> Projets
+                        </a>
+                    </li>
+                    <li class="{% if app.request.get('_route') starts with 'app_employe' %}active{% endif %}">
+                        <a href="{{ path('app_employes') }}">
+                            <i class="fa-regular fa-user"></i> Équipe
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <main>
+                <header>
+                    <div id="current-user"></div>
+                    <div id="title-page">
+                        {% block header %}{% endblock %}
+                    </div>
+                </header>
+                <div id="content">
+                    {% block body %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </body>
+</html>

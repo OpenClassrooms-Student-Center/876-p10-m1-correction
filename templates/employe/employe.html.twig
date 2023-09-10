@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ employe.prenom }} {{ employe.nom }} - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>{{ employe.prenom }} {{ employe.nom }}</h1>
+{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+
+{{ form_row(form.nom) }}
+{{ form_row(form.prenom) }}
+{{ form_row(form.email) }}
+<div class="form-flex">
+    {{ form_row(form.dateArrivee) }}
+    {{ form_row(form.statut) }}
+</div>
+<button class="button button-submit">Enregistrer</button>
+{{ form_end(form) }}
+
+{% endblock %}

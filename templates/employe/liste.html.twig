@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des employés - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>Équipe</h1>
+{% endblock %}
+
+{% block body %}
+
+<table id="team-container">
+    <thead>
+        <tr>
+            <th>Prénom, Nom</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employe in employes %}
+            <tr>
+                <td>
+                    <div class="employee-infos">
+                        <div class="employee-avatar">
+                            {{ employe.prenom | first }}{{ employe.nom | first }}
+                        </div>
+                        <div class="employee-coords">
+                            <strong>{{ employe.prenom }} {{ employe.nom }}</strong>
+                            <span>{{ employe.email }}</span>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ employe.statut }}</td>
+                <td>
+                    <a class="button button-edit-team" href="{{ path('app_employe_edit', {id: employe.id}) }}">
+                        Éditer
+                    </a>
+                    <a class="delete-team" href="{{ path('app_employe_delete', {id: employe.id}) }}">
+                        Supprimer
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des projets - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>Projets</h1>
+{% endblock %}
+
+{% block body %}
+
+<div id="projects-container">
+    {% for projet in projets %}
+        <article class="card-project">
+            <a href="{{ path('app_projet', {id: projet.id}) }}">
+                <h2>{{ projet.nom }}</h2>
+            </a>
+            <div class="card-project-icons">
+                <a href="{{ path('app_projet_edit', {id: projet.id}) }}"><i class="fa-solid fa-pen"></i></a>
+                <a href="{{ path('app_projet_archive', {id: projet.id}) }}"><i class="fa-solid fa-trash"></i></a>
+            </div>
+        </article>
+    {% endfor %}
+
+    <article class="card-project">
+        <a href="{{ path('app_projet_add') }}">
+            <i class="fa-solid fa-circle-plus add-project-icon"></i>
+            <h2>Ajouter un projet</h2>
+        </a>
+    </article>
+</div>
+{% endblock %}

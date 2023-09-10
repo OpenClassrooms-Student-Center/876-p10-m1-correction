@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ projet.nom }} - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>{{ projet.nom }}</h1>
+{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+
+{{ form_row(form.nom) }}
+{{ form_row(form.employes) }}
+<br>
+<button class="button button-submit">Modifier</button>
+{{ form_end(form) }}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ tache.titre }} - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <h1>{{ tache.titre }}</h1>
+{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+
+{{ form_row(form.titre) }}
+{{ form_row(form.description) }}
+<div class="flex-form">
+    {{ form_row(form.deadline) }}
+    {{ form_row(form.statut) }}
+</div>
+{{ form_row(form.employe) }}
+<br>
+<button class="button button-submit">Modifier</button>
+<a href="{{ path('app_tache_delete', {id: tache.id}) }}" class="delete-task">Supprimer la tâche</a>
+{{ form_end(form) }}
+
+{% endblock %}

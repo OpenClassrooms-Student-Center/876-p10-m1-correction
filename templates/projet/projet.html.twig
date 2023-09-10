@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ projet.nom }} - {{ parent() }}{% endblock %}
+
+{% block header %}
+    <div class="flex-header">
+        <h1>{{ projet.nom }}</h1>
+        <div class="user-list">
+            {% for employe in projet.employes %}
+                <div class="avatar">{{ employe.prenom | first }}{{ employe.nom | first }}</div>
+            {% endfor %}
+        </div>
+        <a class="button" href="{{ path('app_projet_edit', {id: projet.id})}}">Modifier</a>
+    </div>
+{% endblock %}
+
+{% block body %}
+    <div id="tasks-container">
+        {% for statut in statuts %}
+            <div class="task-column">
+                <h2>{{ statut.libelle }}</h2>
+                <div class="tasks-list">
+                    {% for tache in projet.taches | filter(tache => tache.statut == statut) %}
+                        <a class="task" href="{{ path('app_tache', {id: tache.id}) }}">
+                            <h3>{{ tache.titre }}</h3>
+                            {% if tache.description %}
+                                <p>{{ tache.description }}</p>
+                            {% endif %}
+                            {% if tache.deadline or tache.employe %}
+                                <div class="task-infos">
+                                {% if tache.deadline %}
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ tache.deadline | date('d/m/Y') }}
+                                    </div>
+                                {% endif %}
+                                {% if tache.employe %}
+                                    <div class="mini-user">
+                                        {{ tache.employe.prenom | first }}{{ tache.employe.nom | first }}
+                                    </div>
+                                {% endif %}
+                                </div>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                    <a href="{{ path('app_tache_add', {id: projet.id}) }}" class="task-add">
+                        + Ajouter une tâche
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
